@@ -38,7 +38,7 @@ frontend/  React 18 + Vite (SPA estática)  ──HTTP/JSON──▶  backend/  
   - `controllers/` traduce HTTP ⇄ servicio.
   - `services/` concentra **toda la lógica de negocio** (el sorteo periodizado es puro y está en `services/periodized/draw.js`).
   - `repositories/` es el único lugar con SQL y siempre filtra por usuario.
-- **Persistencia:** base relacional vía Knex, con las mismas migraciones para MySQL y SQLite. Producción hoy: SQLite persistente en el servidor de Hostinger, fuera de la carpeta desplegada (`DB_CLIENT=sqlite`). Pasar a MySQL de Hostinger es solo cambiar variables de entorno (`DB_CLIENT=mysql` y `DB_*`); al arrancar se crean las tablas solas. Tests: SQLite en memoria. La aritmética de fechas se hace en JS, no en SQL, para que los dos motores se comporten igual.
+- **Persistencia:** base relacional vía Knex, con las mismas migraciones para MySQL y SQLite. Producción: **MySQL de Hostinger** (`DB_CLIENT=mysql`; al arrancar se crean las tablas solas). Desarrollo local y tests: SQLite, sin instalar nada. La aritmética de fechas se hace en JS, no en SQL, para que los dos motores se comporten igual.
 - **Auth:** bcrypt + JWT en cookie `httpOnly` (*same-site*, porque front y back comparten dominio).
 - **Seguridad:** sin credenciales en el código, todo por variables de entorno (`.env` ignorado; ver `backend/.env.example`). Además: CORS restringido al frontend, límite de intentos de login y aislamiento de datos por usuario (devuelve 404 ante recursos ajenos).
 
@@ -89,7 +89,7 @@ cd backend && npm test
 ## Despliegue
 
 - **API:** app web de Node.js en Hostinger. Se sube la carpeta `deploy-hostinger/`, que en cada deploy instala la rama `main` de este repositorio desde GitHub y la arranca. Las migraciones se aplican solas al iniciar.
-- **Base de datos:** SQLite persistente en `DATA_DIR`, o MySQL de Hostinger con `DB_CLIENT=mysql`.
+- **Base de datos:** MySQL de Hostinger. Las credenciales se cargan solo como variables de entorno en hPanel.
 - **Frontend:** `npm run web` (o `npm --prefix frontend run build`) con `VITE_API_URL` apuntando a la API. El contenido de `frontend/dist` se publica como sitio estático. El `.htaccess` de `frontend/public` resuelve las rutas de la SPA.
 
 ## Estructura
