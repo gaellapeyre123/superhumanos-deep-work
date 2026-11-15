@@ -97,4 +97,21 @@ Ejecutadas el 2026-11-14 en local (Chrome, 1440 × 900 y 800 px de ancho) sobre 
 
 ## 4. Pruebas en producción
 
-Las URLs están en el README (sección «En producción»). Al desplegar se verifican `GET /api/health`, el login demo, la carga de la semana y un ciclo completo de sesión.
+Ejecutadas el 2026-11-15 contra https://deepwork.gaellapeyre.com (frontend) y https://deepwork-api.gaellapeyre.com (API).
+
+| # | Prueba | Resultado |
+|---|---|---|
+| P01 | `GET /api/health` | ✅ `{"ok":true}` |
+| P02 | Login demo desde el origen del frontend: CORS con credenciales y cookie `HttpOnly; Secure; SameSite=Lax; Domain=.gaellapeyre.com` | ✅ |
+| P03 | Frontend: `/`, rutas de la SPA (`/datos`), JS y fuentes | ✅ 200 en todas |
+| P04 | «Probar con la cuenta demo» en el navegador → semana con datos | ✅ |
+| P05 | Registro de un usuario nuevo y alta de una tarea; persiste al volver a consultarla | ✅ |
+| P06 | Aislamiento: editar una tarea de otro usuario | ✅ 404 |
+| P07 | Responsive: planificador en pantalla angosta (menú hamburguesa, contadores 2×2) | ✅ |
+
+### Incidentes de despliegue resueltos
+
+| # | Incidente | Causa | Solución |
+|---|---|---|---|
+| I1 | El build de Hostinger fallaba con `npm run build:web` | Hostinger ejecuta cualquier script `build:*` del `package.json` | El paquete de despliegue define un `build:web` que no hace nada |
+| I2 | 503 al arrancar | El servidor Node de Hostinger (LiteSpeed) carga la app con `require()`, incompatible con el `await` de nivel superior | `server.js` arranca dentro de una función `async main()` |
