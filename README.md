@@ -38,7 +38,7 @@ frontend/  React 18 + Vite (SPA estática)  ──HTTP/JSON──▶  backend/  
   - `controllers/` traduce HTTP ⇄ servicio.
   - `services/` concentra **toda la lógica de negocio** (el sorteo periodizado es puro y está en `services/periodized/draw.js`).
   - `repositories/` es el único lugar con SQL y siempre filtra por usuario.
-- **Persistencia:** MySQL en producción (Hostinger) y SQLite en desarrollo y tests, con las mismas migraciones Knex. La aritmética de fechas se hace en JS, no en SQL, para que los dos motores se comporten igual.
+- **Persistencia:** base relacional vía Knex, con las mismas migraciones para MySQL y SQLite. Producción hoy: SQLite persistente en el servidor de Hostinger, fuera de la carpeta desplegada (`DB_CLIENT=sqlite`). Pasar a MySQL de Hostinger es solo cambiar variables de entorno (`DB_CLIENT=mysql` y `DB_*`); al arrancar se crean las tablas solas. Tests: SQLite en memoria. La aritmética de fechas se hace en JS, no en SQL, para que los dos motores se comporten igual.
 - **Auth:** bcrypt + JWT en cookie `httpOnly` (*same-site*, porque front y back comparten dominio).
 - **Seguridad:** sin credenciales en el código, todo por variables de entorno (`.env` ignorado; ver `backend/.env.example`). Además: CORS restringido al frontend, límite de intentos de login y aislamiento de datos por usuario (devuelve 404 ante recursos ajenos).
 
@@ -80,7 +80,8 @@ cd backend && npm test
 | `DB_CLIENT` | `sqlite` o `mysql`. |
 | `SQLITE_FILE` | Archivo SQLite (solo desarrollo). |
 | `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` | Conexión MySQL. |
-| `JWT_SECRET` | Secreto para firmar la sesión. |
+| `JWT_SECRET` | Secreto para firmar la sesión. Si falta en producción, se genera uno aleatorio y se guarda en `DATA_DIR`. |
+| `DATA_DIR` | Carpeta persistente para la base SQLite y el secreto (default `~/deepwork-data`). |
 | `CORS_ORIGIN` | Origen(es) del frontend, separados por coma. |
 | `COOKIE_DOMAIN` | Dominio de la cookie en producción (ej. `.gaellapeyre.com`). |
 | `SEED_DEMO` | `1` crea el usuario demo en el primer arranque si no existe. |
@@ -88,7 +89,7 @@ cd backend && npm test
 ## Despliegue
 
 - **API:** app web de Node.js en Hostinger, conectada a este repositorio. Corre `npm install` y `npm start` en la raíz (el `package.json` raíz arranca `backend/src/server.js`). Las migraciones se aplican solas al iniciar.
-- **Base de datos:** MySQL de Hostinger.
+- **Base de datos:** SQLite persistente en `DATA_DIR`, o MySQL de Hostinger con `DB_CLIENT=mysql`.
 - **Frontend:** `npm --prefix frontend run build` con `VITE_API_URL` apuntando a la API. El contenido de `frontend/dist` se publica como sitio estático. El `.htaccess` de `frontend/public` resuelve las rutas de la SPA.
 
 ## Estructura
