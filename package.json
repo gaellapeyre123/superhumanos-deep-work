@@ -1,0 +1,26 @@
+{
+  "name": "superhumanos-deep-work",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "SuperHumanos · Deep Work — planificá, ejecutá y medí tus sesiones de Deep Work. Monorepo: backend/ (API REST) y frontend/ (SPA).",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node backend/src/server.js",
+    "test": "npm --prefix backend test",
+    "build:web": "npm --prefix frontend run build"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "knex": "^3.1.0",
+    "mysql2": "^3.11.5",
+    "zod": "^3.24.1"
+  }
+}
