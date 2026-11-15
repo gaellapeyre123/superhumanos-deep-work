@@ -1,0 +1,18 @@
+{
+  "name": "deepwork-api-hostinger",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Envoltorio de despliegue para Hostinger: instala la API desde el repositorio público de GitHub (rama main) en cada deploy.",
+  "main": "server.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "build:web": "node -e \"console.log('La API no tiene paso de build')\""
+  },
+  "dependencies": {
+    "superhumanos-deep-work": "github:gaellapeyre123/superhumanos-deep-work#main"
+  }
+}
