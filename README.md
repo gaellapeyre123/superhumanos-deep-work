@@ -7,7 +7,7 @@ Aplicación web full stack para **planificar, ejecutar y medir sesiones de Deep 
 | | URL |
 |---|---|
 | **Frontend** | https://deepwork.gaellapeyre.com |
-| **Backend (API REST)** | https://api-deepwork.gaellapeyre.com/api/health |
+| **Backend (API REST)** | https://deepwork-api.gaellapeyre.com/api/health |
 
 **Cuenta demo** (con 8 semanas de datos cargados): `demo@superhumanos.app` / `superhumanos`. También hay un botón «Probar con la cuenta demo» en el login. Cualquiera puede registrarse con su propio email.
 
@@ -28,7 +28,7 @@ Aplicación web full stack para **planificar, ejecutar y medir sesiones de Deep 
 ## Arquitectura
 
 ```
-frontend/  React 18 + Vite (SPA estática)  ──HTTP/JSON──▶  backend/  Node.js + Express (API REST)  ──Knex──▶  MySQL
+frontend/  React 18 + Vite (SPA estática)  ──HTTP/JSON──▶  backend/  Node.js + Express (API REST)  ──Knex──▶  SQL (SQLite / MySQL)
                                                                          routes → controllers → services → repositories
 ```
 
@@ -88,9 +88,9 @@ cd backend && npm test
 
 ## Despliegue
 
-- **API:** app web de Node.js en Hostinger, conectada a este repositorio. Corre `npm install` y `npm start` en la raíz (el `package.json` raíz arranca `backend/src/server.js`). Las migraciones se aplican solas al iniciar.
+- **API:** app web de Node.js en Hostinger. Se sube la carpeta `deploy-hostinger/`, que en cada deploy instala la rama `main` de este repositorio desde GitHub y la arranca. Las migraciones se aplican solas al iniciar.
 - **Base de datos:** SQLite persistente en `DATA_DIR`, o MySQL de Hostinger con `DB_CLIENT=mysql`.
-- **Frontend:** `npm --prefix frontend run build` con `VITE_API_URL` apuntando a la API. El contenido de `frontend/dist` se publica como sitio estático. El `.htaccess` de `frontend/public` resuelve las rutas de la SPA.
+- **Frontend:** `npm run web` (o `npm --prefix frontend run build`) con `VITE_API_URL` apuntando a la API. El contenido de `frontend/dist` se publica como sitio estático. El `.htaccess` de `frontend/public` resuelve las rutas de la SPA.
 
 ## Estructura
 
@@ -105,4 +105,5 @@ frontend/
   src/  (pages/, components/, api.js, auth.jsx, styles.css)
   public/  (fuentes, logos, .htaccess)
 docs/  (spec.md, qa.md)
+deploy-hostinger/  (paquete de despliegue de la API)
 ```

@@ -10,7 +10,7 @@
   "scripts": {
     "start": "node backend/src/server.js",
     "test": "npm --prefix backend test",
-    "build:web": "npm --prefix frontend run build"
+    "web": "npm --prefix frontend run build"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
