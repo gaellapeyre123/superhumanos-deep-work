@@ -108,6 +108,7 @@ Ejecutadas el 2026-11-15 contra https://deepwork.gaellapeyre.com (frontend) y ht
 | P05 | Registro de un usuario nuevo y alta de una tarea; persiste al volver a consultarla | ✅ |
 | P06 | Aislamiento: editar una tarea de otro usuario | ✅ 404 |
 | P07 | Responsive: planificador en pantalla angosta (menú hamburguesa, contadores 2×2) | ✅ |
+| P08 | Migración a MySQL de Hostinger: la API arranca con `DB: mysql`, crea las tablas y el usuario demo; login, semana, rachas, resumen semanal, mapa, calibrador, ciclo completo de sesión, cierre simple, cierre periodizado (6 temas) y exportación de estado | ✅ mismos resultados que con SQLite |
 
 ### Incidentes de despliegue resueltos
 
